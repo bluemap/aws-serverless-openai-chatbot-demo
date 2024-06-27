@@ -29,7 +29,7 @@ This application is built on a totally serverless architecture:
 - Go to each Lambda function folder under the server folder,  install the dependencies and make .zip file archives for uploading to Amazon Lambda. For example, to make a lambda_login.zip:  
   `>cd server/lambda_login`    
   `>npm install <br/> `   
-  `>zip -r lambda_login.zip`  
+  `>zip -r lambda_login.zip .`  
   We will create 3 Amazon Lambda functions, that means we will make 3 .zip files (lambda_auth.zip/ lambda_login.zip/ lambda_chat.zip)in total.
 
 ## Create Lambda functions

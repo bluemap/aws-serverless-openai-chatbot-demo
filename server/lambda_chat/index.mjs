@@ -1,12 +1,10 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
-import { Configuration, OpenAIApi } from "openai";
+import { OpenAI } from "openai";
 
-const configuration = new Configuration({
+const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
-
-const openai = new OpenAIApi(configuration);
 
 export const handler = async (event) => {
   const body = JSON.parse(event.body);
@@ -20,15 +18,18 @@ export const handler = async (event) => {
     };
   }
   try {
-    const response = await openai.createCompletion({
-      model: params.model_name,
-      prompt: prompt,
-      temperature: params.temperature, // Higher values means the model will take more risks.
-      max_tokens: params.max_tokens, // The maximum number of tokens to generate in the completion. 
-      top_p: params.top_p, // alternative to sampling with temperature, called nucleus sampling
-      frequency_penalty: params.frequency_penalty, //decreasing the model's likelihood to repeat the same line verbatim.
-      presence_penalty: params.presence_penalty, // increasing the model's likelihood to talk about new topics.
-    });
+    const response = await openai.chat.completions.create({
+      messages:[{
+        content:prompt,
+        role:'user',
+      }],
+      model:params.model_name,
+      temperature:params.temperature,
+      max_tokens:params.max_tokens,
+      top_p:params.top_p,
+      frequency_penalty:params.frequency_penalty,
+      presence_penalty:params.presence_penalty
+    },);
     return {
       statusCode: 200,
       body: JSON.stringify({id:body.id,
